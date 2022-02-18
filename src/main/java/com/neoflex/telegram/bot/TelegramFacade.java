@@ -1,5 +1,6 @@
 package com.neoflex.telegram.bot;
 
+import com.neoflex.telegram.client.CryptoClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class TelegramFacade {
 
+    private final CryptoClient cryptoClient;
     public BotApiMethod<?> handleUpdate(Update update) {
         SendMessage replyMessage = null;
         if (update.hasCallbackQuery()) {
@@ -40,6 +42,10 @@ public class TelegramFacade {
         SendMessage replyMessage = null;
         if (inputMessage.equals("/start")){
             replyMessage = new SendMessage(String.valueOf(chatId), "Hello!");
+        }else if(inputMessage.equals("q")){
+//            System.out.println(cryptoClient.getPrice("BTC", "USD"));
+            replyMessage = new SendMessage(String.valueOf(chatId),
+                   cryptoClient.getPrice("bitcoin", "usd").toString());
         }
         return replyMessage;
 
