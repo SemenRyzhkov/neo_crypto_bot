@@ -1,8 +1,0 @@
-server:
-  port: 5000
-client:
-  apiKey: ${API_KEY}
-bot:
-  name: ${BOT_NAME}
-  token: ${BOT_TOKEN}
-  webHookPath: https://7213-95-152-63-12.ngrok.io
