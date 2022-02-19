@@ -55,6 +55,9 @@ public class TelegramFacade {
             case "мой профиль":
                 botState = BotState.SHOW_PROFILE;
                 break;
+            case "отчет по биткоину за месяц":
+                botState = BotState.SHOW_REPORT;
+                break;
             default:
                 botState = dataCache.getBotState(userId);
                 break;

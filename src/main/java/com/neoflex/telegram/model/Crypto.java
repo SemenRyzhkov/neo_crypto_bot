@@ -9,5 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class Crypto {
-    private Price bitcoin;
+    private Bitcoin bitcoin;
+
 }

@@ -33,14 +33,13 @@ public class MenuService {
 
         KeyboardRow row1 = new KeyboardRow();
         KeyboardRow row2 = new KeyboardRow();
-        KeyboardRow row3 = new KeyboardRow();
         row1.add(new KeyboardButton("Подписаться на биткоин"));
-        row2.add(new KeyboardButton("Отписаться от биткоина"));
-        row3.add(new KeyboardButton("Мой профиль"));
+        row1.add(new KeyboardButton("Отписаться от биткоина"));
+        row1.add(new KeyboardButton("Отчет по биткоину за стрим"));
+        row2.add(new KeyboardButton("Мой профиль"));
 
         keyboard.add(row1);
         keyboard.add(row2);
-        keyboard.add(row3);
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;
     }

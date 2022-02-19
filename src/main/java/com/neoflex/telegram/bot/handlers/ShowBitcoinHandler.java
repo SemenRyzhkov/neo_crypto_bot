@@ -35,6 +35,7 @@ public class ShowBitcoinHandler implements InputMessageHandler {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(message.getChatId()));
         messageSender.setSendMessage(sendMessage);
+        messageSender.setMessage(message);
         timer.schedule(messageSender, 0, 10000);
         return new SendMessage(String.valueOf(message.getChatId()), "Подписка оформлена");
     }
