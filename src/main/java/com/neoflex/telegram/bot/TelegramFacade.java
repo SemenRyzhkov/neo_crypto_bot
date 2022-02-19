@@ -1,6 +1,6 @@
 package com.neoflex.telegram.bot;
 
-import com.neoflex.telegram.client.CryptoClient;
+import com.neoflex.telegram.cache.DataCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,14 +10,12 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Timer;
-
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class TelegramFacade {
-    private final MessageSender messageSender;
-//    private final CryptoClient cryptoClient;
+    private final BotStateContext botStateContext;
+    private final DataCache dataCache;
 
     public BotApiMethod<?> handleUpdate(Update update) {
         SendMessage replyMessage = null;
@@ -41,23 +39,25 @@ public class TelegramFacade {
     private SendMessage handleInputMessage(Message message) {
 
         String inputMessage = message.getText().toLowerCase();
-        long chatId = message.getChatId();
-        SendMessage replyMessage = null;
-        if (inputMessage.equals("/start")) {
-            replyMessage = new SendMessage(String.valueOf(chatId), "Hello!");
-        } else if (inputMessage.equals("q")) {
-            Timer timer = new Timer();
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(String.valueOf(message.getChatId()));
-//            MessageSender messageSender = new MessageSender(neoBot, cryptoClient, sendMessage);
-            messageSender.setSendMessage(sendMessage);
-            timer.schedule(messageSender, 0, 10000);
-//            replyMessage = new SendMessage(String.valueOf(chatId),
-//                    String.valueOf(cryptoClient.getPrice("bitcoin", "usd").getBitcoin().getUsd()));
+        long userId = message.getFrom().getId();
+        BotState botState;
 
+
+        switch (inputMessage) {
+            case "/start":
+                botState = BotState.SHOW_MAIN_MENU;
+                break;
+            case "подписаться на биткоин":
+            case "отписаться от биткоина":
+//                botState = BotState.SHOW_MAIN_MENU;
+                botState = BotState.SHOW_BITCOIN;
+                break;
+            default:
+                botState = dataCache.getBotState(userId);
+                break;
         }
-        return replyMessage;
-
+        dataCache.setBotState(userId, botState);
+        return botStateContext.processInputMessage(botState, message);
     }
 
 }

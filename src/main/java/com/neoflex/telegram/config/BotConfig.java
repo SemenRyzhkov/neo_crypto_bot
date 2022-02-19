@@ -1,6 +1,7 @@
 package com.neoflex.telegram.config;
 
 
+import com.neoflex.telegram.bot.MessageSender;
 import com.neoflex.telegram.bot.NeoBot;
 import com.neoflex.telegram.bot.TelegramFacade;
 import lombok.Getter;
@@ -32,7 +33,6 @@ public class BotConfig {
     }
 
     @Bean
-    @Primary
     public NeoBot springNeoBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
         NeoBot bot = new NeoBot(telegramFacade, setWebhook);
         bot.setBotToken(getBotToken());
@@ -41,14 +41,24 @@ public class BotConfig {
 
         return bot;
     }
-
-    @Bean(name = "new")
-    public NeoBot newNeoBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
-        NeoBot bot = new NeoBot(telegramFacade, setWebhook);
-        bot.setBotToken(getBotToken());
-        bot.setBotUsername(getBotUsername());
-        bot.setBotPath(getWebHookPath());
-
-        return bot;
-    }
+//
+//    @Bean
+//    public MessageSender messageSender(SetWebhook setWebhook, TelegramFacade telegramFacade) {
+//        NeoBot bot = new NeoBot(telegramFacade, setWebhook);
+//        bot.setBotToken(getBotToken());
+//        bot.setBotUsername(getBotUsername());
+//        bot.setBotPath(getWebHookPath());
+//
+//        return bot;
+//    }
+//
+//    @Bean(name = "new")
+//    public NeoBot newNeoBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
+//        NeoBot bot = new NeoBot(telegramFacade, setWebhook);
+//        bot.setBotToken(getBotToken());
+//        bot.setBotUsername(getBotUsername());
+//        bot.setBotPath(getWebHookPath());
+//
+//        return bot;
+//    }
 }

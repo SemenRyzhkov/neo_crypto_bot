@@ -19,17 +19,9 @@ import java.util.Timer;
 @RequiredArgsConstructor
 public class WebHookController {
     private final NeoBot neoBot;
-    private final CryptoClient cryptoClient;
 
     @PostMapping("/")
-    public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) throws TelegramApiException {
-        Message message = update.getMessage();
-//        Timer timer = new Timer();
-//        SendMessage sendMessage = new SendMessage();
-//        sendMessage.setChatId(String.valueOf(message.getChatId()));
-//        MessageSender messageSender = new MessageSender(neoBot, cryptoClient, sendMessage);
-//        messageSender.setSendMessage(sendMessage);
-//        timer.schedule(messageSender, 0, 10000);
+    public BotApiMethod<?> onUpdateReceived(@RequestBody Update update){
         return neoBot.onWebhookUpdateReceived(update);
 
     }
