@@ -10,12 +10,15 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.Timer;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class TelegramFacade {
+    private final MessageSender messageSender;
+//    private final CryptoClient cryptoClient;
 
-    private final CryptoClient cryptoClient;
     public BotApiMethod<?> handleUpdate(Update update) {
         SendMessage replyMessage = null;
         if (update.hasCallbackQuery()) {
@@ -40,12 +43,18 @@ public class TelegramFacade {
         String inputMessage = message.getText().toLowerCase();
         long chatId = message.getChatId();
         SendMessage replyMessage = null;
-        if (inputMessage.equals("/start")){
+        if (inputMessage.equals("/start")) {
             replyMessage = new SendMessage(String.valueOf(chatId), "Hello!");
-        }else if(inputMessage.equals("q")){
-//            System.out.println(cryptoClient.getPrice("BTC", "USD"));
-            replyMessage = new SendMessage(String.valueOf(chatId),
-                   cryptoClient.getPrice("bitcoin", "usd").toString());
+        } else if (inputMessage.equals("q")) {
+            Timer timer = new Timer();
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(String.valueOf(message.getChatId()));
+//            MessageSender messageSender = new MessageSender(neoBot, cryptoClient, sendMessage);
+            messageSender.setSendMessage(sendMessage);
+            timer.schedule(messageSender, 0, 10000);
+//            replyMessage = new SendMessage(String.valueOf(chatId),
+//                    String.valueOf(cryptoClient.getPrice("bitcoin", "usd").getBitcoin().getUsd()));
+
         }
         return replyMessage;
 
