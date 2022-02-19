@@ -31,7 +31,8 @@ public class MessageSender extends TimerTask {
     @Override
     public void run() {
         try {
-            sendMessage.setText(String.valueOf(cryptoClient.getPrice("bitcoin", "usd").getBitcoin().getUsd()));
+            String price = String.valueOf(cryptoClient.getPrice("bitcoin", "usd").getBitcoin().getUsd());
+            sendMessage.setText(String.format("BTC - %s USD", price));
             neoBot.execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();

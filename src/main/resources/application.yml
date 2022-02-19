@@ -5,3 +5,10 @@ bot:
   name: ${BOT_NAME}
   token: ${BOT_TOKEN}
   webHookPath: https://7213-95-152-63-12.ngrok.io
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5438/crypto_db
+    username: postgres
+    password: postgres
