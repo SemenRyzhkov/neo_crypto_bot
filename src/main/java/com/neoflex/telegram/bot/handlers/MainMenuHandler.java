@@ -23,7 +23,7 @@ public class MainMenuHandler implements InputMessageHandler {
 
         User user = new User(userId, message.getFrom().getFirstName(), message.getFrom().getUserName());
         userService.save(user);
-        return mainMenuService.getMainMenuMessage(chatId,"Воспользуйтесь главным меню");
+        return mainMenuService.getMainMenuMessage(chatId,"Привет!\nВоспользуйтесь главным меню");
     }
 
     @Override

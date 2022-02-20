@@ -1,5 +1,6 @@
 package com.neoflex.telegram.bot;
 
+import com.neoflex.telegram.bot.handlers.CallbackQueryHandler;
 import com.neoflex.telegram.cache.DataCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TelegramFacade {
     private final BotStateContext botStateContext;
     private final DataCache dataCache;
+    private final CallbackQueryHandler callbackQueryHandler;
+
 
     public BotApiMethod<?> handleUpdate(Update update) {
         SendMessage replyMessage = null;
@@ -23,7 +26,7 @@ public class TelegramFacade {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             log.info("New callbackQuery from User: {}, userId: {}, with data: {}", update.getCallbackQuery().getFrom().getUserName(),
                     callbackQuery.getFrom().getId(), update.getCallbackQuery().getData());
-            return null;
+            return callbackQueryHandler.processCallbackQuery(callbackQuery);
         } else {
             Message message = update.getMessage();
 
@@ -55,8 +58,11 @@ public class TelegramFacade {
             case "мой профиль":
                 botState = BotState.SHOW_PROFILE;
                 break;
-            case "отчет по биткоину за месяц":
+            case "отчет по биткоину за стрим":
                 botState = BotState.SHOW_REPORT;
+                break;
+            case "сообщать о понижении":
+                botState = BotState.ASK_DOWNGRADE;
                 break;
             default:
                 botState = dataCache.getBotState(userId);

@@ -33,13 +33,16 @@ public class MenuService {
 
         KeyboardRow row1 = new KeyboardRow();
         KeyboardRow row2 = new KeyboardRow();
+        KeyboardRow row3 = new KeyboardRow();
         row1.add(new KeyboardButton("Подписаться на биткоин"));
         row1.add(new KeyboardButton("Отписаться от биткоина"));
-        row1.add(new KeyboardButton("Отчет по биткоину за стрим"));
-        row2.add(new KeyboardButton("Мой профиль"));
+        row2.add(new KeyboardButton("Отчет по биткоину за стрим"));
+        row2.add(new KeyboardButton("Сообщать о понижении"));
+        row3.add(new KeyboardButton("Мой профиль"));
 
         keyboard.add(row1);
         keyboard.add(row2);
+        keyboard.add(row3);
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;
     }
@@ -57,16 +60,25 @@ public class MenuService {
         return sendMessage;
     }
 
-    public InlineKeyboardMarkup getInlineMessageButtons(String text, String data) {
+    public InlineKeyboardMarkup getInlineMessageButtons() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
-        InlineKeyboardButton buttonSave = new InlineKeyboardButton();
-        buttonSave.setText(text);
-        buttonSave.setCallbackData(data);
+        InlineKeyboardButton oo1 = new InlineKeyboardButton();
+        oo1.setText("0.01%");
+        InlineKeyboardButton five = new InlineKeyboardButton();
+        five.setText("5%");
+        InlineKeyboardButton ten = new InlineKeyboardButton();
+        ten.setText("10%");
 
+        //Every button must have callBackData, or else not work !
+        oo1.setCallbackData("1");
+        five.setCallbackData("5");
+        ten.setCallbackData("10");
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
-        keyboardButtonsRow1.add(buttonSave);
+        keyboardButtonsRow1.add(oo1);
+        keyboardButtonsRow1.add(five);
+        keyboardButtonsRow1.add(ten);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow1);
