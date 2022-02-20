@@ -28,15 +28,34 @@ public class MessageSender extends TimerTask {
     private BitcoinService bitcoinService;
     private SendMessage sendMessage;
     private Message message;
+    boolean flag = true;
+
 
     @Override
     public void run() {
+        Crypto crypto = cryptoClient.getPrice("bitcoin", "usd");
+        Bitcoin bitcoin = crypto.getBitcoin();
+        long userId = message.getFrom().getId();
+        double usd = bitcoinService.getLastByDateTime().getUsd();
+        if (flag) {
+            sendFirstMessage(bitcoin);
+        }
+        if (usd != bitcoin.getUsd()) {
+            sendMessage(bitcoin);
+        }
+        bitcoinService.save(bitcoin, userId);
+
+
+    }
+
+    private void sendFirstMessage(Bitcoin bitcoin) {
+        sendMessage(bitcoin);
+        flag = false;
+    }
+
+    private void sendMessage(Bitcoin bitcoin) {
+        sendMessage.setText(String.format("BTC - %s USD", bitcoin.getUsd()));
         try {
-            Crypto crypto= cryptoClient.getPrice("bitcoin", "usd");
-            Bitcoin bitcoin = crypto.getBitcoin();
-            long userId = message.getFrom().getId();
-            bitcoinService.save(bitcoin, userId);
-            sendMessage.setText(String.format("BTC - %s USD", bitcoin.getUsd()));
             neoBot.execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
