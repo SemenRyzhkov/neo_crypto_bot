@@ -8,7 +8,6 @@ import com.neoflex.telegram.service.BitcoinService;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -28,7 +27,7 @@ public class MessageSender extends TimerTask {
     private BitcoinService bitcoinService;
     private SendMessage sendMessage;
     private Message message;
-    boolean flag = true;
+    boolean isFirstMessageNotWasSend = true;
 
 
     @Override
@@ -37,20 +36,18 @@ public class MessageSender extends TimerTask {
         Bitcoin bitcoin = crypto.getBitcoin();
         long userId = message.getFrom().getId();
         double usd = bitcoinService.getLastByDateTime().getUsd();
-        if (flag) {
+        if (isFirstMessageNotWasSend) {
             sendFirstMessage(bitcoin);
         }
         if (usd != bitcoin.getUsd()) {
             sendMessage(bitcoin);
         }
         bitcoinService.save(bitcoin, userId);
-
-
     }
 
     private void sendFirstMessage(Bitcoin bitcoin) {
         sendMessage(bitcoin);
-        flag = false;
+        isFirstMessageNotWasSend = false;
     }
 
     private void sendMessage(Bitcoin bitcoin) {
