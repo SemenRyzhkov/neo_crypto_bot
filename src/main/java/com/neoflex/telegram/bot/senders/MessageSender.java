@@ -1,6 +1,6 @@
-package com.neoflex.telegram.bot;
+package com.neoflex.telegram.bot.senders;
 
-import com.neoflex.telegram.cache.DataCache;
+import com.neoflex.telegram.bot.NeoBot;
 import com.neoflex.telegram.client.CryptoClient;
 import com.neoflex.telegram.model.Bitcoin;
 import com.neoflex.telegram.model.Crypto;
@@ -18,39 +18,28 @@ import java.util.TimerTask;
 
 @Setter
 @Component
-public class CheckIndicators extends TimerTask {
+public class MessageSender extends TimerTask {
     @Lazy
     @Autowired
     private NeoBot neoBot;
     @Autowired
     private CryptoClient cryptoClient;
     @Autowired
-    private DataCache dataCache;
+    private BitcoinService bitcoinService;
     private SendMessage sendMessage;
     private Message message;
 
     @Override
     public void run() {
         try {
-            long userId = Long.parseLong(sendMessage.getChatId());
-            Double current = dataCache.getCurrent(userId);
             Crypto crypto= cryptoClient.getPrice("bitcoin", "usd");
             Bitcoin bitcoin = crypto.getBitcoin();
-            if ((current - bitcoin.getUsd()) > percent(current)){
-                sendMessage.setText(String.format("!!!!!WARNING!!!!!%n" +
-                        "Биткоин упал больше чем на 0.01 процент%n" +
-                        "!!!!!!WARNING!!!!!"));
-                neoBot.execute(sendMessage);
-                return;
-            }
-
+            long userId = message.getFrom().getId();
+            bitcoinService.save(bitcoin, userId);
+            sendMessage.setText(String.format("BTC - %s USD", bitcoin.getUsd()));
+            neoBot.execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-    }
-
-
-    private Double percent(Double current) {
-        return current/10000;
     }
 }

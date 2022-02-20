@@ -1,7 +1,7 @@
 package com.neoflex.telegram.bot.handlers;
 
 import com.neoflex.telegram.bot.BotState;
-import com.neoflex.telegram.bot.MessageSender;
+import com.neoflex.telegram.bot.senders.MessageSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,6 +14,7 @@ import java.util.Timer;
 public class ShowBitcoinHandler implements InputMessageHandler {
     private final MessageSender messageSender;
     private Timer timer = new Timer();
+
 
     @Override
     public SendMessage handle(Message message) {

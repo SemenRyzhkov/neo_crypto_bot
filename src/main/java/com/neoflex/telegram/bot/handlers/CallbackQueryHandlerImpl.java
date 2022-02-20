@@ -1,6 +1,6 @@
 package com.neoflex.telegram.bot.handlers;
 
-import com.neoflex.telegram.bot.CheckIndicators;
+import com.neoflex.telegram.bot.senders.CheckIndicators;
 import com.neoflex.telegram.cache.DataCache;
 import com.neoflex.telegram.client.CryptoClient;
 import lombok.RequiredArgsConstructor;
